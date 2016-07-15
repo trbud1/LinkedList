@@ -10,7 +10,8 @@ namespace firstTest
     {
 
         public static Type itemType = typeof(T);
-        LinkedList<T> myList = new LinkedList<T>();
+        public LinkedList<T> myList = new LinkedList<T>();
+
 
         public Game()
         {
@@ -40,7 +41,7 @@ namespace firstTest
                         break;
                     //Add End
                     case "2":
-                        //myList.addNodeEnd(GetName());
+                        myList.addNodeEnd(GetName());
                         break;
                     //Delete start
                     case "3":

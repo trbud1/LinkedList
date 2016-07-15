@@ -1,209 +1,117 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace firstTest
 {
     class Program
     {   
         public static string ourType;
+        public LinkedList<int> linkedList;
+        //public LinkedList linkedList;
         static void Main(string[] args)
         {
 
-            if(args.Count() >= 1)
-            {
-                switch(args[0])
-                {
-                    case "string":
-                        new Game<string>().GameMenu();
-                        ourType = "string";
-                        break;
-                    case "int":
-                        ourType = "int";
-                        new Game<int>().GameMenu();
-                        break;
-                    default: // defaults to string
-                        ourType = "string";
-                        new Game<string>().GameMenu();
-                        break;
-                }
-            }
+            Test t = new Test();
+            t.SequentialInsert(1500);
+            t.NonSequentialInsert(1500);
+            t.readRecords(1500);
 
-        }
-    }
+            //var linkedList = new LinkedList<int>();
 
- 
+            ////TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            ////int start = (int)t.TotalSeconds;
+            //Stopwatch sw = new Stopwatch();
+            
+            //long time = 200000l;
+            //Random r = new Random();
+            //ArrayList array = new ArrayList();
+            //int i = 0;
+            //for (int k = 0; k < time; k++)
+            //{  
+            //    linkedList.addNodeAt(r.Next(0, linkedList.size), new Node<int>(k));
+            //}
+            //for (int k = 0; k < time; k++)
+            //{
+            //    array.Insert(r.Next(0, linkedList.size), new Node<int>(k));
+            //    //.Add(r.Next(0, 2), new Node<int>(k));
+            //}
+            //sw.Start();
+            //foreach (var item in linkedList)
+            //{
+            //    item.ToString();
+            //    //Console.Write("{0}.{1}--> ", i, item);
+            //    i++;
+            //}
+            ////int end = (int)t.TotalSeconds;
+            //sw.Stop();
+            //Console.WriteLine("Add {0} records using LINKED LIST: {1} seconds", time, sw.Elapsed);
+            //sw.Reset();
+            //sw.Start();
+            ////t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            ////start = (int)t.TotalSeconds;
+           
+            //foreach(var idfs in array)
+            //{
+            //    idfs.ToString();
+            //}
 
-    public class Node<T>{
+            //sw.Stop();
+            ////end = (int)t.TotalSeconds;
 
-        public T value;
-        public Node<T> next;
+            //Console.WriteLine("Add 200 records using ARRAYLIST: {0} seconds", sw.Elapsed);
 
-        public Node(T value)
-        {
-            this.value = value;
-            next = null;
-        }
- 
-    }
+            //linkedList.add(1);
+            //linkedList.add(1);
+            //linkedList.add(2);
+            //linkedList.add(1);
+            //linkedList.add(4);
+            //linkedList.add(1);
 
-    public class LinkedList<T> : ILinkedlist
-    {
-        Node<T> head;
-        public int size = 0;
+            //do
+            //{
+            //int i = 0;
+            //foreach (var item in linkedList)
+            //{
+            //    Console.Write("{0}.{1}--> ", i,item);
+            //    i++;
+            //}
 
-        public void addNodeEnd(T name)
-        {
-
-            Node<T> newNode = new Node<T>(name);
-            Node<T> currentHead = this.head;
-
-            while (true)
-            {
-                if(currentHead.next == null)
-                {
-                    currentHead.next = newNode;
-                    break;
-                }
-                currentHead = currentHead.next;
-            }
-            this.size++;
-
-        }
-        public void addNodeStart(T name)
-        {
-            Node<T> newNode = new Node<T>(name);
-            Node<T> tmp = head;
-            newNode.next = head;
-            head = newNode;
-            this.size++;
-        }
-
-        public void add(T aValue)
-        {
-            Node<T> newNode = new Node<T>(aValue);
-            Node<T> tmp = head;
-            newNode.next = head;
-            head = newNode;
-            this.size++;
-        }
-
-        public void addNodeAt(int pos, Node<T> newNode)
-        {
-            Node<T> curHead = head;
-
-            for (int i = 0; i < pos-1 ; i++)
-            {
-
-                curHead = curHead.next;
-            }
-
-            if (pos == 0)
-            {
-                Node<T> temp = head;
-                head = newNode;
-                newNode.next = temp;
-            }
-            else
-            {
-                Node<T> next = curHead.next;
-                curHead.next = newNode;
-                newNode.next = next;
-            }
-
-        }
-
-        public void removeNode(int pos)
-        { 
-            if(size <= 0)
-            {
-                showError("No elements to remove");
-                return;
-            }
-            //if valid index
-            if (pos >= 0 && pos <= this.size)
-            {
-                Node<T> cur = head;
-
-                if (this.size == pos)
-                {
-                    for (int i = 0; i < pos - 2; i++)
-                    {
-                        //Console.WriteLine("position: {0}", pos);
-                        //Console.Read();
-                        cur = cur.next;
-                    }
-
-                    cur.next = null;
-                }
-                else
-                {
-
-                    for (int i = 0; i < pos - 1; i++)
-                    {
-                        //Console.WriteLine("position: {0}", pos);
-                        //Console.Read();
-                        cur = cur.next;
-                    }
-
-                    if (pos == 0)
-                    {
-                        head = cur.next;
-                    }
-
-                    else if (cur.next.next == null)
-                    {
-                        cur.next = null;
-                    }
-                    else if (cur.next.next != null)
-                    {
-                        cur.next = cur.next.next;
-                        //head = cur.next;
-                    }
-                }
-                this.size--;
-            }else
-            {
-                Console.WriteLine("Not a valid value");
-                Console.Read();
-            }
-        }
-        
-       
-        public void PrintNodes()
-        {
-            Node<T> cur = head;
-            int i = 0;
-            //Console.WriteLine("cur: {0}", cur.value);
-            while (cur != null)
-            {
-                if(cur.next == null)
-                {
-                    Console.WriteLine("{0}. {1} --> null", i, cur.value.ToString());
-                }else
-                {
-                    Console.Write("{0}. {1} -->", i, cur.value);
-                }
-                i++;
-                cur = cur.next;
-            }
-
-            Console.WriteLine("Size: {0}\n", this.size);
-        }
+            //    Console.WriteLine("1. Insert at start");
+            //    Console.WriteLine("2. Insert at end");
+            //    Console.WriteLine("3. Delete at start");
+            //    Console.WriteLine("4. Delete at end");
 
 
-        public void showError(string x)
-        {
-            Console.WriteLine(x);
+
+            //} while (true);
+
             Console.Read();
+
+            //if(args.Count() >= 1)
+            //{
+            //    switch(args[0])
+            //    {
+            //        case "string":
+            //            new Game<string>().GameMenu();
+            //            ourType = "string";
+            //            break;
+            //        case "int":
+            //            ourType = "int";
+            //            new Game<int>().GameMenu();
+            //            break;
+            //        default: // defaults to string
+            //            ourType = "string";
+            //            new Game<string>().GameMenu();
+            //            break;
+            //    }
+            //}
+
         }
     }
 
-
-    public interface ILinkedlist
-    {
-         void PrintNodes();
-    }
 }
