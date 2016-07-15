@@ -7,40 +7,58 @@ using System.Threading.Tasks;
 namespace firstTest
 {
     class Program
-    {
+    {   
+        public static string ourType;
         static void Main(string[] args)
-        { 
-            Game g = new Game();
-            g.gameMenu();
+        {
+
+            if(args.Count() >= 1)
+            {
+                switch(args[0])
+                {
+                    case "string":
+                        new Game<string>().GameMenu();
+                        ourType = "string";
+                        break;
+                    case "int":
+                        ourType = "int";
+                        new Game<int>().GameMenu();
+                        break;
+                    default: // defaults to string
+                        ourType = "string";
+                        new Game<string>().GameMenu();
+                        break;
+                }
+            }
+
         }
     }
 
  
 
-    public class Node{
+    public class Node<T>{
 
-        public object value;
-        public Node next;
+        public T value;
+        public Node<T> next;
 
-        public Node(object value)
+        public Node(T value)
         {
             this.value = value;
             next = null;
         }
-
-        
+ 
     }
 
-    public class LinkedList
+    public class LinkedList<T> : ILinkedlist
     {
-        Node head;
-        public int size = 1;
+        Node<T> head;
+        public int size = 0;
 
-        public void addNodeEnd(string name)
+        public void addNodeEnd(T name)
         {
 
-            Node newNode = new Node(name);
-            Node currentHead = this.head;
+            Node<T> newNode = new Node<T>(name);
+            Node<T> currentHead = this.head;
 
             while (true)
             {
@@ -54,31 +72,27 @@ namespace firstTest
             this.size++;
 
         }
-        public void addNodeStart()
+        public void addNodeStart(T name)
         {
-
-            //Node newNode = new Node(GetName());
-            Node newNode = new Node("xzcz");
-            Node tmp = head;
+            Node<T> newNode = new Node<T>(name);
+            Node<T> tmp = head;
             newNode.next = head;
             head = newNode;
             this.size++;
         }
 
-        public void add(string aValue)
+        public void add(T aValue)
         {
-
-            Node newNode = new Node(aValue);
-            Node tmp = head;
-
+            Node<T> newNode = new Node<T>(aValue);
+            Node<T> tmp = head;
             newNode.next = head;
             head = newNode;
             this.size++;
         }
 
-        public void addNodeAt(int pos, Node newNode)
+        public void addNodeAt(int pos, Node<T> newNode)
         {
-            Node curHead = head;
+            Node<T> curHead = head;
 
             for (int i = 0; i < pos-1 ; i++)
             {
@@ -88,75 +102,86 @@ namespace firstTest
 
             if (pos == 0)
             {
-                Node temp = head;
+                Node<T> temp = head;
                 head = newNode;
                 newNode.next = temp;
             }
             else
             {
-                Node next = curHead.next;
+                Node<T> next = curHead.next;
                 curHead.next = newNode;
                 newNode.next = next;
             }
 
         }
 
-
-
-
         public void removeNode(int pos)
-        {
-            if (pos == -1)
+        { 
+            if(size <= 0)
             {
-                Console.WriteLine("Enter index to delete: ");
-                pos = int.Parse(Console.ReadLine());
+                showError("No elements to remove");
+                return;
             }
-
             //if valid index
-            if (pos >= 0 && pos <= this.size-1)
+            if (pos >= 0 && pos <= this.size)
             {
-                Node cur = head;
-                
-                for (int i = 0; i < pos - 1; i++)
-                {
-                    //Console.WriteLine("position: {0}", pos);
-                    //Console.Read();
-                    cur = cur.next;
-                }
-                
-                if(pos == 0)
-                {
-                    head = cur.next;
-                }
+                Node<T> cur = head;
 
+                if (this.size == pos)
+                {
+                    for (int i = 0; i < pos - 2; i++)
+                    {
+                        //Console.WriteLine("position: {0}", pos);
+                        //Console.Read();
+                        cur = cur.next;
+                    }
 
-                else if (cur.next.next != null)
-                {
-                    cur.next = cur.next.next;
-                    //head = cur.next;
-                }
-                else if (cur.next.next == null)
-                {
                     cur.next = null;
+                }
+                else
+                {
+
+                    for (int i = 0; i < pos - 1; i++)
+                    {
+                        //Console.WriteLine("position: {0}", pos);
+                        //Console.Read();
+                        cur = cur.next;
+                    }
+
+                    if (pos == 0)
+                    {
+                        head = cur.next;
+                    }
+
+                    else if (cur.next.next == null)
+                    {
+                        cur.next = null;
+                    }
+                    else if (cur.next.next != null)
+                    {
+                        cur.next = cur.next.next;
+                        //head = cur.next;
+                    }
                 }
                 this.size--;
             }else
             {
                 Console.WriteLine("Not a valid value");
+                Console.Read();
             }
         }
         
        
         public void PrintNodes()
         {
-            Node cur = head;
+            Node<T> cur = head;
             int i = 0;
             //Console.WriteLine("cur: {0}", cur.value);
             while (cur != null)
             {
                 if(cur.next == null)
                 {
-                    Console.WriteLine("{0}. {1} --> null", i, cur.value);
+                    Console.WriteLine("{0}. {1} --> null", i, cur.value.ToString());
                 }else
                 {
                     Console.Write("{0}. {1} -->", i, cur.value);
@@ -165,7 +190,20 @@ namespace firstTest
                 cur = cur.next;
             }
 
-            Console.WriteLine("Size: {0}\n", this.size-1);
+            Console.WriteLine("Size: {0}\n", this.size);
         }
+
+
+        public void showError(string x)
+        {
+            Console.WriteLine(x);
+            Console.Read();
+        }
+    }
+
+
+    public interface ILinkedlist
+    {
+         void PrintNodes();
     }
 }

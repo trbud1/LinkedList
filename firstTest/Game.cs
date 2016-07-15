@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace firstTest
 {
-    class Game
+    class Game<T> where T:IConvertible
     {
 
-        LinkedList myList = new LinkedList();
-        public  void gameMenu()
+        public static Type itemType = typeof(T);
+        LinkedList<T> myList = new LinkedList<T>();
+
+        public Game()
+        {
+        }
+
+        public void GameMenu()
         {
             string selection;
-            initLinkedList();
             
             do
             {
@@ -31,30 +36,26 @@ namespace firstTest
                 {
                     //Add Start
                     case "1":
-                        myList.addNodeStart();
+                        myList.addNodeStart(GetName());
                         break;
                     //Add End
                     case "2":
-                        myList.addNodeEnd(GetName());
+                        //myList.addNodeEnd(GetName());
                         break;
                     //Delete start
                     case "3":
                         DeleteAtIndex(0);
-                        //myList.removeNode(0);
                         break;
                     //Delete End
                     case "4":
-                        DeleteAtIndex(myList.size - 1);
-                        //myList.removeNode(myList.size - 1);
+                        DeleteAtIndex(myList.size);
                         break;
                     //Delete at index
                     case "5":
                         DeleteAtIndex(-1);
-                        
                         break;
                     case "6":
-                        InsertAtLocation();
-                        
+                        InsertAtLocation(GetName());
                         break;
 
                     default:
@@ -81,19 +82,25 @@ namespace firstTest
             
         }
 
-        public void InsertAtLocation()
+
+        public void InsertAtLocation(T name)
         {
             Console.WriteLine("Enter node location: ");
+            //int pos = int.Parse(Console.ReadLine());
             int pos = int.Parse(Console.ReadLine());
-            Node newNode = new Node(GetName());
+            Node<T> newNode = new Node<T>(name);
 
             myList.addNodeAt(pos, newNode);
         }
 
-        public string GetName()
+        public T GetName()
         {
-            Console.WriteLine("Enter node name: ");
-            return Console.ReadLine();
+            Console.Write("Enter name: ");
+            T myVal = (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
+            //Console.Write("The saved value is: {0}", myVal);
+            //Console.Read();
+            return myVal;
+
         }
 
         public void PrintMenu()
@@ -109,12 +116,12 @@ namespace firstTest
 
         public void initLinkedList()
         {
-            string[] items = new string[] { "Sixth", "Fifth", "Fourth", "Third", "Second", "First" };
+            //string[] items = new string[] { "Sixth", "Fifth", "Fourth", "Third", "Second", "First" };
 
-            foreach (string i in items)
-            {
-                myList.add(i);
-            }
+            //foreach (string i in items)
+            //{
+            //    myList.add(i);
+            //}
         }
 
     }
